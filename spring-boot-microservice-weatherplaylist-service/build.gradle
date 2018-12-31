@@ -28,11 +28,10 @@ ext['springCloudVersion'] = 'Greenwich.RC2'
 
 dependencies {
 	compile(
-		'se.michaelthelin.spotify:spotify-web-api-java:2.1.1',
-		[group: 'net.aksingh', name: 'owm-japis', version: '2.5.2.3', transitive: true],
 		[group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1', transitive: true],
 		[group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-ribbon', version: '2.0.2.RELEASE', transitive: true],
-		[group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-eureka-client', version: '2.0.2.RELEASE', transitive: true]
+		[group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-eureka-client', version: '2.0.2.RELEASE', transitive: true],
+		[group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.0.2.RELEASE', transitive: true]
 	)
 	implementation('org.springframework.boot:spring-boot-starter-web')
 	implementation('org.springframework.cloud:spring-cloud-starter-openfeign')
