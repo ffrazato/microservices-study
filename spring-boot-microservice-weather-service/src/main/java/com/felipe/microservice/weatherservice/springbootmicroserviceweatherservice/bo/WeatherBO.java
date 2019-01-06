@@ -2,8 +2,10 @@ package com.felipe.microservice.weatherservice.springbootmicroserviceweatherserv
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.felipe.microservice.weatherservice.springbootmicroserviceweatherservice.exception.BusinessException;
 import com.felipe.microservice.weatherservice.springbootmicroserviceweatherservice.mechanism.provider.weather.OpenWeatherMapWeatherProvider;
-import com.felipe.microservice.weatherservice.springbootmicroserviceweatherservice.mechanism.provider.weather.WeatherProvider;
+
+import net.aksingh.owmjapis.api.APIException;
 
 /**
  * Business class to handle the weather logic
@@ -21,12 +23,15 @@ public class WeatherBO {
     public double getWeatherByCityName(String cityName) {
         double temperature;
         if (StringUtils.isNotBlank(cityName)) {
-            // get current tempreature for given city
-            WeatherProvider owm = OpenWeatherMapWeatherProvider.getInstance();
-            temperature = owm.getCurrentCelsiusTemperatureByCityName(cityName);
+            try {
+                // get current tempreature for given city
+                temperature = OpenWeatherMapWeatherProvider.getInstance().getCurrentCelsiusTemperatureByCityName(cityName);
+            } catch (APIException e) {
+                // TODO: Log the error
+                throw new BusinessException("Error while getting temperature from weather provider", e);
+            }
         } else {
-            // it can be enhancend by creating our own exception and setting an error pattern to display on client
-            throw new NullPointerException("City name can't be null");
+            throw new BusinessException("City name can't be null");
         }
 
         return temperature;
@@ -44,12 +49,15 @@ public class WeatherBO {
     public double getWeatherByGeoCoordinates(double lat, double lon) {
         double temperature;
         if (lat != 0D && lon != 0D) {
-            // get current temperature for given geo coordinates
-            WeatherProvider owm = OpenWeatherMapWeatherProvider.getInstance();
-            temperature = owm.getCurrentCelsiusTemperatureByGeoCoordinates(lat, lon);
+            try {
+                // get current temperature for given geo coordinates
+                temperature = OpenWeatherMapWeatherProvider.getInstance().getCurrentCelsiusTemperatureByGeoCoordinates(lat, lon);
+            } catch (APIException e) {
+                // TODO: Log the error
+                throw new BusinessException("Error while getting temperature from weather provider", e);
+            }
         } else {
-            // it can be enhanced by creating our own exception and setting an error pattern to display on client
-            throw new NullPointerException("Missing geo coordinates");
+            throw new BusinessException("Missing geo coordinates");
         }
 
         return temperature;

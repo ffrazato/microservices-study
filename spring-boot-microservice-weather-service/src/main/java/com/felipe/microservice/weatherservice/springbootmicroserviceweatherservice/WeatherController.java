@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.felipe.microservice.weatherservice.springbootmicroserviceweatherservice.bo.WeatherBO;
+import com.felipe.microservice.weatherservice.springbootmicroserviceweatherservice.exception.BusinessException;
 
 @RestController
 public class WeatherController {
@@ -17,9 +18,17 @@ public class WeatherController {
      */
     @GetMapping("/weather/on/{cityName}")
     public Double getPlayListByCityName(@PathVariable String cityName) {
-        WeatherBO weatherBO = new WeatherBO();
+        Double temperature = null;
 
-        return weatherBO.getWeatherByCityName(cityName);
+        try {
+
+            WeatherBO weatherBO = new WeatherBO();
+            temperature = weatherBO.getWeatherByCityName(cityName);
+
+        } catch (BusinessException be) {
+            // TODO: handle this exception to retrieve something useful to the client
+        }
+        return temperature;
     }
 
     /**
@@ -33,8 +42,16 @@ public class WeatherController {
      */
     @GetMapping("/weather/on/{lat}/{lon}")
     public Double getPlayListByCityName(@PathVariable double lat, @PathVariable double lon) {
-        WeatherBO weatherBO = new WeatherBO();
+        Double temperature = null;
 
-        return weatherBO.getWeatherByGeoCoordinates(lat, lon);
+        try {
+
+            WeatherBO weatherBO = new WeatherBO();
+            return weatherBO.getWeatherByGeoCoordinates(lat, lon);
+
+        } catch (BusinessException be) {
+            // TODO: handle this exception to retrieve something useful to the client
+        }
+        return temperature;
     }
 }

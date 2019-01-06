@@ -1,7 +1,5 @@
 package com.felipe.microservice.weatherservice.springbootmicroserviceweatherservice.mechanism.provider.weather;
 
-import org.apache.commons.lang3.StringUtils;
-
 import net.aksingh.owmjapis.api.APIException;
 import net.aksingh.owmjapis.core.OWM;
 import net.aksingh.owmjapis.core.OWM.Unit;
@@ -33,33 +31,19 @@ public class OpenWeatherMapWeatherProvider implements WeatherProvider {
     }
 
     @Override
-    public double getCurrentCelsiusTemperatureByCityName(String cityname) {
+    public double getCurrentCelsiusTemperatureByCityName(String cityname) throws APIException {
         CurrentWeather cwd = null;
 
-        if (!StringUtils.isEmpty(cityname) && !StringUtils.isBlank(cityname)) {
-            try {
-                cwd = owm.currentWeatherByCityName(cityname);
-            } catch (APIException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
-        } else {
-            // TODO Felipe: Throw an NullCityNameException
-        }
+        cwd = owm.currentWeatherByCityName(cityname);
 
         return extractCurrentTemperature(cwd);
     }
 
     @Override
-    public double getCurrentCelsiusTemperatureByGeoCoordinates(double latitude, double longitude) {
+    public double getCurrentCelsiusTemperatureByGeoCoordinates(double latitude, double longitude) throws APIException {
         CurrentWeather cwd = null;
 
-        try {
-            cwd = owm.currentWeatherByCoords(latitude, longitude);
-        } catch (APIException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
+        cwd = owm.currentWeatherByCoords(latitude, longitude);
 
         return extractCurrentTemperature(cwd);
     }

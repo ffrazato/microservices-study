@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.felipe.microservice.weatherplaylist.springbootmicroserviceweatherplaylistservice.exception.BusinessException;
 import com.felipe.microservice.weatherplaylist.springbootmicroserviceweatherplaylistservice.mechanism.proxy.PlaylistServiceProxy;
 import com.felipe.microservice.weatherplaylist.springbootmicroserviceweatherplaylistservice.mechanism.proxy.WeatherServiceProxy;
 
@@ -31,9 +32,16 @@ public class WeatherPlaylistBO {
     public List<String> getPlaylistTrackNamesByCityName(String cityName) {
         List<String> playlistSoundTracks = null;
 
-        double temperature = weatherServiceProxy.retrieveCurrentTemperatureByCity(cityName);
+        try {
 
-        playlistSoundTracks = getPlaylistSoundTrackNames(temperature);
+            double temperature = weatherServiceProxy.retrieveCurrentTemperatureByCity(cityName);
+            playlistSoundTracks = getPlaylistSoundTrackNames(temperature);
+
+        } catch (Exception e) {
+            // TODO log the exception
+            // TODO something that we can do here is to get a previous value from a kind of cache
+            throw new BusinessException("Problems getting data from other microservices", e);
+        }
 
         return playlistSoundTracks;
     }
@@ -47,9 +55,16 @@ public class WeatherPlaylistBO {
     public List<String> getPlaylistTrackNamesByGeoCoordinates(double latitude, double longitude) {
         List<String> playlistSoundTracks = null;
 
-        double temperature = weatherServiceProxy.retrieveCurrentTemperatureByGeoCoordinates(latitude, longitude);
+        try {
 
-        playlistSoundTracks = getPlaylistSoundTrackNames(temperature);
+            double temperature = weatherServiceProxy.retrieveCurrentTemperatureByGeoCoordinates(latitude, longitude);
+            playlistSoundTracks = getPlaylistSoundTrackNames(temperature);
+
+        } catch (Exception e) {
+            // TODO log the exception
+            // TODO something that we can do here is to get a previous value from a kind of cache
+            throw new BusinessException("Problems getting data from other microservices", e);
+        }
 
         return playlistSoundTracks;
     }

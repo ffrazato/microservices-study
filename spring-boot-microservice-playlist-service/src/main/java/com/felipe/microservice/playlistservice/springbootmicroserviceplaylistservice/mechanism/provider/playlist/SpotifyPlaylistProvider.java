@@ -1,11 +1,9 @@
 package com.felipe.microservice.playlistservice.springbootmicroserviceplaylistservice.mechanism.provider.playlist;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.wrapper.spotify.SpotifyApi;
-import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import com.wrapper.spotify.model_objects.credentials.ClientCredentials;
 import com.wrapper.spotify.model_objects.specification.Paging;
 import com.wrapper.spotify.model_objects.specification.PlaylistTrack;
@@ -29,23 +27,21 @@ public class SpotifyPlaylistProvider implements PlaylistProvider {
 
     /**
      * Initializer spotify api including the oauth2 authentication
+     * 
+     * @throws Exception
      */
-    private SpotifyPlaylistProvider() {
+    private SpotifyPlaylistProvider() throws Exception {
         spotifyApi = new SpotifyApi.Builder().setClientId(getClientId()).setClientSecret(getClientSecret()).build();
         clientCredentialsRequest = spotifyApi.clientCredentials().build();
 
-        try {
-            final ClientCredentials clientCredentials = clientCredentialsRequest.execute();
+        final ClientCredentials clientCredentials = clientCredentialsRequest.execute();
 
-            // Set access token for further "spotifyApi" object usage
-            spotifyApi.setAccessToken(clientCredentials.getAccessToken());
-        } catch (IOException | SpotifyWebApiException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
+        // Set access token for further "spotifyApi" object usage
+        spotifyApi.setAccessToken(clientCredentials.getAccessToken());
     }
 
     @Override
-    public List<String> getPlaylistTracksByGenres(GenreEnum genre) {
+    public List<String> getPlaylistTracksByGenres(GenreEnum genre) throws Exception {
         List<String> playlistTracks = new ArrayList<>();
 
         String playListID = null;
@@ -72,11 +68,7 @@ public class SpotifyPlaylistProvider implements PlaylistProvider {
 
         Paging<PlaylistTrack> playlistTrackPaging = null;
 
-        try {
-            playlistTrackPaging = getPlaylistsTracksRequest.execute();
-        } catch (SpotifyWebApiException | IOException e) {
-            e.printStackTrace();
-        }
+        playlistTrackPaging = getPlaylistsTracksRequest.execute();
 
         for (PlaylistTrack playlistTrack : playlistTrackPaging.getItems()) {
             playlistTracks.add(playlistTrack.getTrack().getName());
@@ -89,8 +81,9 @@ public class SpotifyPlaylistProvider implements PlaylistProvider {
      * Singleton method to get the instance of SpotifyPlaylistProvider
      *
      * @return singleton instance for SpotifyPlaylistProvider
+     * @throws Exception
      */
-    public static SpotifyPlaylistProvider getInstance() {
+    public static SpotifyPlaylistProvider getInstance() throws Exception {
         // double check to avoid synchronizing it
         if (instance == null) {
             synchronized (SpotifyPlaylistProvider.class) {

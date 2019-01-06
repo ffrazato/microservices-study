@@ -8,11 +8,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.felipe.microservice.weatherplaylist.springbootmicroserviceweatherplaylistservice.bo.WeatherPlaylistBO;
+import com.felipe.microservice.weatherplaylist.springbootmicroserviceweatherplaylistservice.exception.BusinessException;
 
 /**
  * Weather playlist service controller
+ * 
  * @author ffrazato
- *
  */
 @RestController
 public class WeatherPlaylistController {
@@ -29,7 +30,16 @@ public class WeatherPlaylistController {
      */
     @GetMapping("/playlist/{cityName}")
     public List<String> getPlayListByCityName(@PathVariable String cityName) {
-        return weatherPlaylistBO.getPlaylistTrackNamesByCityName(cityName);
+        List<String> playlistSoundTracks = null;
+        try {
+
+            playlistSoundTracks = weatherPlaylistBO.getPlaylistTrackNamesByCityName(cityName);
+
+        } catch (BusinessException be) {
+            // TODO: handle this excetping to retrieve something useful to the client
+        }
+
+        return playlistSoundTracks;
     }
 
     /**
@@ -41,6 +51,15 @@ public class WeatherPlaylistController {
      */
     @GetMapping("/playlist/{latitude}/{longitude}")
     public List<String> getPlayListByGeoCoordinates(@PathVariable double latitude, @PathVariable double longitude) {
-        return weatherPlaylistBO.getPlaylistTrackNamesByGeoCoordinates(latitude, longitude);
+        List<String> playlistSoundTracks = null;
+        try {
+
+            playlistSoundTracks = weatherPlaylistBO.getPlaylistTrackNamesByGeoCoordinates(latitude, longitude);
+
+        } catch (BusinessException be) {
+            // TODO: handle this excetping to retrieve something useful to the client
+        }
+
+        return playlistSoundTracks;
     }
 }

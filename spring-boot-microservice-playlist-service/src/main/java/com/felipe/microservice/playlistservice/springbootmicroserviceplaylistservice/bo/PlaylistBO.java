@@ -2,8 +2,8 @@ package com.felipe.microservice.playlistservice.springbootmicroserviceplaylistse
 
 import java.util.List;
 
+import com.felipe.microservice.playlistservice.springbootmicroserviceplaylistservice.exception.BusinessException;
 import com.felipe.microservice.playlistservice.springbootmicroserviceplaylistservice.mechanism.provider.playlist.GenreEnum;
-import com.felipe.microservice.playlistservice.springbootmicroserviceplaylistservice.mechanism.provider.playlist.PlaylistProvider;
 import com.felipe.microservice.playlistservice.springbootmicroserviceplaylistservice.mechanism.provider.playlist.SpotifyPlaylistProvider;
 
 /**
@@ -19,10 +19,17 @@ public class PlaylistBO {
      * @return soud track names
      */
     public List<String> getPlaylisSoundtrackNamesByGenre(GenreEnum genre) {
-        // get playlist for chosen genre
-        PlaylistProvider spotifyProvider = SpotifyPlaylistProvider.getInstance();
+        List<String> playlistTrackNames = null;
 
-        return spotifyProvider.getPlaylistTracksByGenres(genre);
+        try {
+            // get playlist for chosen genre
+            playlistTrackNames = SpotifyPlaylistProvider.getInstance().getPlaylistTracksByGenres(genre);
 
+        } catch (Exception e) {
+            // TODO: LOG THE ERROR
+            throw new BusinessException("Problems while getting playlist from provider", e);
+        }
+
+        return playlistTrackNames;
     }
 }

@@ -12,6 +12,7 @@ public interface PlaylistProvider {
      * Given a playlist genre it retrieves the playlist tracks
      * @param genre
      * @return
+     * @throws Exception 
      */
-    public List<String> getPlaylistTracksByGenres(GenreEnum genre); 
+    public List<String> getPlaylistTracksByGenres(GenreEnum genre) throws Exception; 
 }
